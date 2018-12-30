@@ -11,7 +11,7 @@ import com.ticketserver.dao.Book;
 import com.ticketserver.hibernate.HibernateUtils;
 
 /**
- * Hello world!
+ * Hello world! Again.
  *
  */
 public class App {
