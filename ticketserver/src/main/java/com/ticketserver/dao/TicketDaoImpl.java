@@ -45,5 +45,23 @@ public class TicketDaoImpl implements ITicketDao {
 		return tickets;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Ticket> getTicketsById(Long id) {
+		List<Ticket> tickets = new ArrayList<>();
+		try {
+			Session session = this.sessionFactory.openSession();
+			session.beginTransaction();
+			String queryString = "from Ticket where userId=:id";
+			tickets = (List<Ticket>) session.createQuery(queryString)
+											 .setParameter("id", id.intValue()).list();
+			session.getTransaction().commit();
+			session.close();
+		} catch (HibernateException cause) {
+			System.out.println(cause);
+		}
+		return tickets;
+	}
+
 	
 }

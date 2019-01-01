@@ -7,4 +7,5 @@ import com.ticketserver.model.Ticket;
 public interface ITicketDao {
 	Ticket addTicket(Ticket ticket);
 	List<Ticket> getTickets();
+	List<Ticket> getTicketsById(Long id);
 }

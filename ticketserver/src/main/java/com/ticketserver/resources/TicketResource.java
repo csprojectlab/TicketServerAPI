@@ -6,6 +6,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,15 +20,23 @@ import com.ticketserver.services.interfaces.ITicketService;
 @Path("/tickets")
 public class TicketResource {
 	private ITicketService ticketService = new TicketServiceImpl();
-	
+
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/user/{id}")
+	public Response getTicketById(@PathParam("id") int id) {
+		List<TicketDto> tickets = this.ticketService.getTicketById(id);
+		return Response.status(Status.OK).entity(tickets).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTickets() {
+		System.out.println("ALL TICKETS");
 		List<TicketDto> tickets = this.ticketService.getTickets();
 		return Response.status(Status.OK).entity(tickets).build();
 	}
-	
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -35,5 +44,6 @@ public class TicketResource {
 	public Response addTicket(Ticket ticket) {
 		Ticket addedTicket = this.ticketService.addTicket(ticket);
 		return Response.status(Status.OK).entity(addedTicket).build();
-	}	
+	}
+
 }

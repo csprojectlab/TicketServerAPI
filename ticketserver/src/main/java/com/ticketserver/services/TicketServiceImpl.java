@@ -41,4 +41,13 @@ public class TicketServiceImpl implements ITicketService {
 		dto.setId(ticket.getId());
 		return dto;
 	}
+
+	@Override
+	public List<TicketDto> getTicketById(int id) {
+		List<Ticket> tickets = this.ticketDao.getTicketsById(new Long(id));
+		List<TicketDto> ticketsDto = new ArrayList<>();
+		for (Ticket ticket : tickets)
+			ticketsDto.add(this.generateTicketDto(ticket));
+		return ticketsDto;
+	}
 }
