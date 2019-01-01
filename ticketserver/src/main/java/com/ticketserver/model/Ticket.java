@@ -50,6 +50,11 @@ public class Ticket {
 		comment.setTicket(null);
 	}
 	
+	@Override
+	public String toString() {
+		return this.userId + " : " + this.message + " : " + this.ownedBy;
+	}
+	
 	public Long getId() {
 		return id;
 	}

@@ -29,6 +29,7 @@ public class Main {
         // in com.nagarro.RESTFulGrizzlyDemo package
 //    	JacksonJsonProvider jjp = new JacksonJsonProvider();
         final ResourceConfig rc = new ResourceConfig().packages("com.ticketserver")
+        												.packages("com.ticketserver.resources")
         		                                .register(new AbstractBinder() {
         		                                	protected void configure() {
         		                                	}
