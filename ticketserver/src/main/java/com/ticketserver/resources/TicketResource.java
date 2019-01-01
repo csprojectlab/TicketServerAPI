@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.ticketserver.dto.CommentDto;
 import com.ticketserver.dto.TicketDto;
 import com.ticketserver.model.Ticket;
 import com.ticketserver.services.TicketServiceImpl;
@@ -20,6 +21,16 @@ import com.ticketserver.services.interfaces.ITicketService;
 @Path("/tickets")
 public class TicketResource {
 	private ITicketService ticketService = new TicketServiceImpl();
+	
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addcomment")
+	public Response addComment(CommentDto comment) {
+		CommentDto addedComment = this.ticketService.addComment(comment);
+		return Response.status(Status.OK).entity(addedComment).build();
+	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +43,6 @@ public class TicketResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTickets() {
-		System.out.println("ALL TICKETS");
 		List<TicketDto> tickets = this.ticketService.getTickets();
 		return Response.status(Status.OK).entity(tickets).build();
 	}

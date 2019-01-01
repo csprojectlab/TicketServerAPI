@@ -1,12 +1,12 @@
 package com.ticketserver.dao;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 import com.ticketserver.dao.interfaces.ITicketDao;
 import com.ticketserver.hibernate.HibernateUtils;
 import com.ticketserver.model.Ticket;
@@ -63,5 +63,21 @@ public class TicketDaoImpl implements ITicketDao {
 		return tickets;
 	}
 
-	
+	@Override
+	public Ticket getUniqueTicket(Long id) {
+		Ticket ticket = null;
+		try {
+			Session session = this.sessionFactory.openSession();
+			session.beginTransaction();
+			String queryString = "from Ticket where id=:id";
+			ticket = (Ticket)session.createQuery(queryString)
+									.setParameter("id", id.longValue()).uniqueResult();
+			session.getTransaction().commit();
+			session.close();
+			System.out.println(ticket);
+		} catch (HibernateException cause) {
+			System.out.println(cause);
+		}
+		return ticket;
+	}
 }

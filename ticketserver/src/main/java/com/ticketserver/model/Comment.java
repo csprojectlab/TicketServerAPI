@@ -23,7 +23,7 @@ public class Comment {
 	private String author;
 	@Column(name="comment", nullable=false)
 	private String comment;
-	@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.DATE)
 	@Column(name="commented_on")
 	private Date date;
 	@ManyToOne(

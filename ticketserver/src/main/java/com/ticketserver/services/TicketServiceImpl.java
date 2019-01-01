@@ -3,14 +3,19 @@ package com.ticketserver.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ticketserver.dao.CommentDaoImpl;
 import com.ticketserver.dao.TicketDaoImpl;
+import com.ticketserver.dao.interfaces.ICommentDao;
 import com.ticketserver.dao.interfaces.ITicketDao;
+import com.ticketserver.dto.CommentDto;
 import com.ticketserver.dto.TicketDto;
+import com.ticketserver.model.Comment;
 import com.ticketserver.model.Ticket;
 import com.ticketserver.services.interfaces.ITicketService;
 
 public class TicketServiceImpl implements ITicketService {
 	private ITicketDao ticketDao = new TicketDaoImpl();
+	private ICommentDao commentDao = new CommentDaoImpl();
 
 	@Override
 	public Ticket addTicket(Ticket ticket) {
@@ -49,5 +54,11 @@ public class TicketServiceImpl implements ITicketService {
 		for (Ticket ticket : tickets)
 			ticketsDto.add(this.generateTicketDto(ticket));
 		return ticketsDto;
+	}
+
+	@Override
+	public CommentDto addComment(CommentDto comment) {
+		CommentDto addedComment = this.commentDao.addComment(comment);
+		return addedComment;
 	}
 }
