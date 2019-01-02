@@ -3,10 +3,12 @@ package com.ticketserver.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 
 import com.ticketserver.dao.interfaces.ITicketDao;
 import com.ticketserver.hibernate.HibernateUtils;
@@ -146,5 +148,44 @@ public class TicketDaoImpl implements ITicketDao {
 			session.close();
 		}
 		return tickets;
+	}
+
+	@Override
+	public long getTicketCount() {
+		long count = 0;
+		Session session = null;
+		try {
+			session = this.sessionFactory.openSession();
+			session.beginTransaction();
+			Criteria criteriaCount = session.createCriteria(Ticket.class);
+			criteriaCount.setProjection(Projections.rowCount());
+			count = (long) criteriaCount.uniqueResult();
+		} catch (HibernateException cause) {
+			System.out.println(cause);
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		return count;
+	}
+
+	@Override
+	public long getTicketCount(int userId) {
+		long count = 0;
+		Session session = null;
+		try {
+			session = this.sessionFactory.openSession();
+			session.beginTransaction();
+			Query query = session.createQuery(
+					"select count(*) from Ticket where userId=:id")
+					.setParameter("id", userId);
+		    count = (long) query.uniqueResult();
+		} catch (HibernateException cause) {
+			System.out.println(cause);
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		return count;
 	}
 }

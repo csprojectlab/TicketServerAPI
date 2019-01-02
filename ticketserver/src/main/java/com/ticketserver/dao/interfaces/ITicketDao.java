@@ -18,4 +18,8 @@ public interface ITicketDao {
 	List<Ticket> paginatedTickets(int start, int pageSize);
 	
 	List<Ticket> paginatedTickets(int userId, int start, int pageSize);
+	
+	long getTicketCount();
+	
+	long getTicketCount(int userId);
 }

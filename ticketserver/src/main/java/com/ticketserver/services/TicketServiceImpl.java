@@ -9,6 +9,7 @@ import com.ticketserver.dao.interfaces.ICommentDao;
 import com.ticketserver.dao.interfaces.ITicketDao;
 import com.ticketserver.dto.AssignTicketDto;
 import com.ticketserver.dto.CommentDto;
+import com.ticketserver.dto.Entries;
 import com.ticketserver.dto.PageSizeDto;
 import com.ticketserver.dto.TicketDto;
 import com.ticketserver.model.Comment;
@@ -88,5 +89,23 @@ public class TicketServiceImpl implements ITicketService {
 			ticketsDto.add(TicketUtils.generateTicketDto(ticket));
 		return ticketsDto;
 	}
+
+	@Override
+	public Entries getTicketCount() {
+		long numberOfTickets = this.ticketDao.getTicketCount();
+		Entries ent = new Entries();
+		ent.setSize(numberOfTickets);
+		return ent;
+	}
+
+	@Override
+	public Entries getTicketCount(int userId) {
+		long numberOfTickets = this.ticketDao.getTicketCount(userId);
+		Entries ent = new Entries();
+		ent.setSize(numberOfTickets);
+		return ent;
+	}
+
+	
 
 }

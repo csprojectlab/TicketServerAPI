@@ -28,16 +28,18 @@ public class TicketResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/count")
-	public Response ticketCount(Entries entries) {
-		return null;
+	public Response ticketCount() {
+		Entries ent = this.ticketService.getTicketCount();
+		return Response.status(Status.OK).entity(ent).build();
 	}
 	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/user/{userId}/count")
-	public Response ticketCount(@PathParam("userId") int userId, Entries entries) {
-		return null;
+	public Response ticketCount(@PathParam("userId") int userId) {
+		Entries ent = this.ticketService.getTicketCount(userId);
+		return Response.status(Status.OK).entity(ent).build();
 	}
 	
 	@POST
