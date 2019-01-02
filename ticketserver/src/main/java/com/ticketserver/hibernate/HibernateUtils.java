@@ -2,11 +2,10 @@ package com.ticketserver.hibernate;
 
 
 import org.hibernate.HibernateException;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import com.ticketserver.dao.Book;
-import com.ticketserver.dao.Person;
 import com.ticketserver.model.Comment;
 import com.ticketserver.model.Ticket;
 
@@ -16,8 +15,7 @@ public class HibernateUtils {
 
 	static {
 		try {
-			sessionFactory = new Configuration().configure().addAnnotatedClass(Person.class)
-					.addAnnotatedClass(Book.class)
+			sessionFactory = new Configuration().configure()
 					.addAnnotatedClass(Ticket.class)
 					.addAnnotatedClass(Comment.class)
 					.buildSessionFactory();

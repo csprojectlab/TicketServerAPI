@@ -1,13 +1,13 @@
 package com.ticketserver;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.ticketserver.dao.Book;
 import com.ticketserver.hibernate.HibernateUtils;
 
 /**
@@ -30,14 +30,14 @@ public class App {
 		} catch (Exception e) {
 			System.out.println("ERROR");
 		}
-		Book book = new Book();
-		book.setName("FIRST BOOK");
-		book.setImage(bfile);
+////		Book book = new Book();
+//		book.setName("FIRST BOOK");
+//		book.setImage(bfile);
 		
 		Session session = sessionFactory.openSession();
 		try {
 			Transaction t = session.beginTransaction();
-			session.save(book);
+//			session.save(book);
 			t.commit();
 			session.close();
 		} catch (Exception e) {
