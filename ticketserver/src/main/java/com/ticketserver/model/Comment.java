@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name="Comment")
 @Table(name="comment")
 public class Comment {
@@ -29,6 +31,7 @@ public class Comment {
 	@ManyToOne(
 			fetch=FetchType.LAZY
 			)
+	@JsonIgnore
 	private Ticket ticket;
 	
 	@Override

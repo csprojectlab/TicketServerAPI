@@ -1,6 +1,7 @@
 package com.ticketserver.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -39,6 +40,30 @@ public class CommentDaoImpl implements ICommentDao {
 			session.close();
 		}
 		return comment;
+	}
+
+	@Override
+	public List<Comment> getComments(long ticketId) {
+		Session session = null;
+		Ticket ticket = null;
+		List<Comment> comments = null;
+		try {
+			session = this.sessionFactory.openSession();
+			session.beginTransaction();
+			String queryString = "from Ticket where id=:id";
+			ticket = (Ticket)session.createQuery(queryString)
+									.setParameter("id", ticketId).uniqueResult();
+			if(ticket == null)	
+				throw new NullPointerException();
+			ticket.getComments().size();	// TRIGGERING .
+			comments = ticket.getComments();   // GET THE COMMENTS.
+		} catch (HibernateException cause) {
+			System.out.println(cause);
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		return comments;
 	}
 
 }

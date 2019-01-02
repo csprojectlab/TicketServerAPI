@@ -22,6 +22,14 @@ import com.ticketserver.services.interfaces.ITicketService;
 public class TicketResource {
 	private ITicketService ticketService = new TicketServiceImpl();
 	
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{ticketId}/comments")
+	public Response getComments(@PathParam("ticketId") int id) {
+		List<CommentDto> comments = this.ticketService.getComments(id);
+		return Response.status(Status.OK).entity(comments).build();
+	}
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

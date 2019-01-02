@@ -12,6 +12,8 @@ import com.ticketserver.dto.TicketDto;
 import com.ticketserver.model.Comment;
 import com.ticketserver.model.Ticket;
 import com.ticketserver.services.interfaces.ITicketService;
+import com.ticketserver.utils.CommentUtils;
+import com.ticketserver.utils.TicketUtils;
 
 public class TicketServiceImpl implements ITicketService {
 	private ITicketDao ticketDao = new TicketDaoImpl();
@@ -29,30 +31,16 @@ public class TicketServiceImpl implements ITicketService {
 		List<Ticket> tickets = this.ticketDao.getTickets();   // GET ALL TICKETS.
 		List<TicketDto> ticketsDto = new ArrayList<>();
 		for(Ticket ticket : tickets) 
-			ticketsDto.add(this.generateTicketDto(ticket));		// GENERATE CORRESPONDNG DTO
+			ticketsDto.add(TicketUtils.generateTicketDto(ticket));		// GENERATE CORRESPONDNG DTO
 		return ticketsDto;
-	}
-	
-	// GENERATES DTO FOR A TICKET. COMMENTS ARE NOT INCLUDED.
-	private TicketDto generateTicketDto(Ticket ticket) {
-		TicketDto dto = new TicketDto();
-		dto.setUserId(ticket.getUserId());
-		dto.setType(ticket.getType());
-		dto.setStatus(ticket.getStatus());
-		dto.setRaisedBy(ticket.getRaisedBy());
-		dto.setPriority(ticket.getPriority());
-		dto.setOwnedBy(ticket.getOwnedBy());
-		dto.setMessage(ticket.getMessage());
-		dto.setId(ticket.getId());
-		return dto;
-	}
+	}	
 
 	@Override
 	public List<TicketDto> getTicketById(int id) {
 		List<Ticket> tickets = this.ticketDao.getTicketsById(new Long(id));
 		List<TicketDto> ticketsDto = new ArrayList<>();
 		for (Ticket ticket : tickets)
-			ticketsDto.add(this.generateTicketDto(ticket));
+			ticketsDto.add(TicketUtils.generateTicketDto(ticket));
 		return ticketsDto;
 	}
 
@@ -61,4 +49,17 @@ public class TicketServiceImpl implements ITicketService {
 		CommentDto addedComment = this.commentDao.addComment(comment);
 		return addedComment;
 	}
+
+	@Override
+	public List<CommentDto> getComments(int ticketId) {
+		List<Comment> comments = this.commentDao.getComments((long) ticketId);
+		if(comments == null)
+			return null;
+		List<CommentDto> commentsDto = new ArrayList<>();
+		for(Comment comment : comments) {
+			commentsDto.add(CommentUtils.generateCommentDto(comment));
+		}
+		return commentsDto;
+	}	
+	
 }

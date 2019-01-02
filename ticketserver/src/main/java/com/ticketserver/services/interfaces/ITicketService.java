@@ -11,4 +11,5 @@ public interface ITicketService {
 	List<TicketDto> getTickets();
 	List<TicketDto> getTicketById(int id);
 	CommentDto addComment(CommentDto comment);
+	List<CommentDto> getComments(int ticketId);
 }
