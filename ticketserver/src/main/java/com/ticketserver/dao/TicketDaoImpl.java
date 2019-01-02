@@ -1,12 +1,13 @@
 package com.ticketserver.dao;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
 import com.ticketserver.dao.interfaces.ITicketDao;
 import com.ticketserver.hibernate.HibernateUtils;
 import com.ticketserver.model.Ticket;
@@ -79,5 +80,71 @@ public class TicketDaoImpl implements ITicketDao {
 			System.out.println(cause);
 		}
 		return ticket;
+	}
+
+	@Override
+	public Ticket assignTicket(long ticketId, String ownedBy) {
+		Ticket ticket = null;
+		Session session = null;
+		try {
+			session = this.sessionFactory.openSession();
+			session.beginTransaction();
+			String queryString = "from Ticket where id=:id";
+			ticket = (Ticket)session.createQuery(queryString)
+									.setParameter("id", ticketId).uniqueResult();
+			if(ticket == null)
+				throw new NullPointerException();
+			ticket.setOwnedBy(ownedBy);
+			ticket.setStatus("ASSIGNED");			
+		} catch (HibernateException cause) {
+			System.out.println(cause);
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		return ticket;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Ticket> paginatedTickets(int start, int pageSize) {
+		List<Ticket> tickets = null;
+		Session session = null;
+		try {
+			session = this.sessionFactory.openSession();
+			session.beginTransaction();
+			Query hql = session.createQuery("from Ticket")
+								.setFirstResult(start)
+								.setMaxResults(pageSize);
+			tickets = (List<Ticket>) hql.list();
+		} catch (HibernateException cause) {
+			System.out.println(cause);
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		return tickets;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Ticket> paginatedTickets(int userId, int start, int pageSize) {
+		List<Ticket> tickets = null;
+		Session session = null;
+		try {
+			session = this.sessionFactory.openSession();
+			session.beginTransaction();
+			Query hql = session.createQuery("from Ticket where userId=:id")
+								.setParameter("id", userId)
+								.setFirstResult(start)
+								.setMaxResults(pageSize);
+			tickets = (List<Ticket>) hql.list();
+		} catch (HibernateException cause) {
+			System.out.println(cause);
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		return tickets;
 	}
 }

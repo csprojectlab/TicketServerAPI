@@ -12,7 +12,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.ticketserver.dto.AssignTicketDto;
 import com.ticketserver.dto.CommentDto;
+import com.ticketserver.dto.Entries;
+import com.ticketserver.dto.PageSizeDto;
 import com.ticketserver.dto.TicketDto;
 import com.ticketserver.model.Ticket;
 import com.ticketserver.services.TicketServiceImpl;
@@ -21,6 +24,51 @@ import com.ticketserver.services.interfaces.ITicketService;
 @Path("/tickets")
 public class TicketResource {
 	private ITicketService ticketService = new TicketServiceImpl();
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/count")
+	public Response ticketCount(Entries entries) {
+		return null;
+	}
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/user/{userId}/count")
+	public Response ticketCount(@PathParam("userId") int userId, Entries entries) {
+		return null;
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/user/{userId}/paginated")
+	public Response paginatedTicketsByUserId(@PathParam("userId") int userId, PageSizeDto pageInfo) {
+		List<TicketDto> paginatedTicketsByUserId = this.ticketService.paginatedTickets(userId, pageInfo);
+		return Response.status(Status.OK).entity(paginatedTicketsByUserId).build();
+	}
+	
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/paginated")
+	public Response paginatedTickets(PageSizeDto pageInfo) {
+		List<TicketDto> paginatedTickets = this.ticketService.paginatedTickets(pageInfo);
+		return Response.status(Status.OK).entity(paginatedTickets).build();
+	}
+	
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/assignticket")
+	public Response assignTicket(AssignTicketDto assignTicketDto) {
+		TicketDto ticketDto = this.ticketService.assignTicket(assignTicketDto);
+		return Response.status(Status.OK).entity(ticketDto).build();
+	}
+	
 	
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)

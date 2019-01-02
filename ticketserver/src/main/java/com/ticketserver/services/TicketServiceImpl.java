@@ -7,7 +7,9 @@ import com.ticketserver.dao.CommentDaoImpl;
 import com.ticketserver.dao.TicketDaoImpl;
 import com.ticketserver.dao.interfaces.ICommentDao;
 import com.ticketserver.dao.interfaces.ITicketDao;
+import com.ticketserver.dto.AssignTicketDto;
 import com.ticketserver.dto.CommentDto;
+import com.ticketserver.dto.PageSizeDto;
 import com.ticketserver.dto.TicketDto;
 import com.ticketserver.model.Comment;
 import com.ticketserver.model.Ticket;
@@ -28,12 +30,12 @@ public class TicketServiceImpl implements ITicketService {
 
 	@Override
 	public List<TicketDto> getTickets() {
-		List<Ticket> tickets = this.ticketDao.getTickets();   // GET ALL TICKETS.
+		List<Ticket> tickets = this.ticketDao.getTickets(); // GET ALL TICKETS.
 		List<TicketDto> ticketsDto = new ArrayList<>();
-		for(Ticket ticket : tickets) 
-			ticketsDto.add(TicketUtils.generateTicketDto(ticket));		// GENERATE CORRESPONDNG DTO
+		for (Ticket ticket : tickets)
+			ticketsDto.add(TicketUtils.generateTicketDto(ticket)); // GENERATE CORRESPONDNG DTO
 		return ticketsDto;
-	}	
+	}
 
 	@Override
 	public List<TicketDto> getTicketById(int id) {
@@ -53,13 +55,38 @@ public class TicketServiceImpl implements ITicketService {
 	@Override
 	public List<CommentDto> getComments(int ticketId) {
 		List<Comment> comments = this.commentDao.getComments((long) ticketId);
-		if(comments == null)
+		if (comments == null)
 			return null;
 		List<CommentDto> commentsDto = new ArrayList<>();
-		for(Comment comment : comments) {
+		for (Comment comment : comments) {
 			commentsDto.add(CommentUtils.generateCommentDto(comment));
 		}
 		return commentsDto;
-	}	
-	
+	}
+
+	@Override
+	public TicketDto assignTicket(AssignTicketDto assignTicketDto) {
+		Ticket updtTicket = this.ticketDao.assignTicket((long) assignTicketDto.getTicketId(), assignTicketDto.getOwnedBy());
+		TicketDto ticketDto = TicketUtils.generateTicketDto(updtTicket);
+		return ticketDto;
+	}
+
+	@Override
+	public List<TicketDto> paginatedTickets(PageSizeDto pageInfo) {
+		List<Ticket> tickets = this.ticketDao.paginatedTickets(pageInfo.getStart(), pageInfo.getPageSize());
+		List<TicketDto> ticketsDto = new ArrayList<>();
+		for (Ticket ticket : tickets) 
+			ticketsDto.add(TicketUtils.generateTicketDto(ticket));
+		return ticketsDto;
+	}
+
+	@Override
+	public List<TicketDto> paginatedTickets(int userId, PageSizeDto pageInfo) {
+		List<Ticket> tickets = this.ticketDao.paginatedTickets(userId, pageInfo.getStart(), pageInfo.getPageSize());
+		List<TicketDto> ticketsDto = new ArrayList<>();
+		for (Ticket ticket : tickets) 
+			ticketsDto.add(TicketUtils.generateTicketDto(ticket));
+		return ticketsDto;
+	}
+
 }
